@@ -33,44 +33,35 @@ usage: %s DIR [N]\n\
 
 int main(int argc, char * argv[])
 {
-    long niter, i, r, c, sum;
-    int dir;
-
     DECLARE_TIMER(1);
+    long niter, i, r, c, x;
+    int dir;
 
     if (argc < 2)
         usage(argv[0]);
 
-    if (strcmp(argv[1], "row") != 0 && strcmp(argv[1], "col") != 0)
+    if (strcmp(argv[1], "row") == 0)
+        dir = ROW_MAJOR;
+    else if (strcmp(argv[1], "col") == 0)
+        dir = COL_MAJOR;
+    else
         usage(argv[0]);
 
-    dir = argv[1][0] == 'r' ? ROW_MAJOR : COL_MAJOR;
     niter = (argc >= 3) ? strtol(argv[2], NULL, 10) : DEFAULT_ITER;
 
-    printf("NROWS: %d NCOLS: %d (matrix size: %zu) ; dir: %s-major ; iterations: %ld\n", NROWS, NCOLS, sizeof(matrix), argv[1], niter);
+    printf("NROWS: %d NCOLS: %d (matrix size: %.1f MiB) ; dir: %s-major ; iterations: %ld\n", NROWS, NCOLS, (float)sizeof(matrix)/(1<<20), argv[1], niter);
 
     START_TIMER(1);
+    x = niter;
     for (i = 0; i < niter; i++) {
         if (dir == ROW_MAJOR) {
             for (r = 0; r < NROWS; r++)
                 for (c = 0; c < NCOLS; c++)
-                    matrix[r][c] = r+c;
-            sum = 0;
-            for (r = 0; r < NROWS; r++)
-                for (c = 0; c < NCOLS; c++)
-                    sum += matrix[r][c];
-            if (sum == 0)
-                printf("%ld\n", sum);
+                    matrix[r][c] = x++;
         } else {
             for (c = 0; c < NCOLS; c++)
                 for (r = 0; r < NROWS; r++)
-                    matrix[r][c] = r+c;
-            sum = 0;
-            for (c = 0; c < NCOLS; c++)
-                for (r = 0; r < NROWS; r++)
-                    sum += matrix[r][c];
-            if (sum == 0)
-                printf("%ld\n", sum);
+                    matrix[r][c] = x++;
         }
     }
     END_TIMER(1);

@@ -14,7 +14,7 @@
 
 #define START_TIMER(X) \
     do {\
-    clock_gettime(CLOCK_MONOTONIC, &start_time ## X);\
+    	clock_gettime(CLOCK_MONOTONIC, &start_time ## X);\
     } while(0)
 
 #define END_TIMER(X) \
@@ -24,7 +24,9 @@
         dnsec ## X = end_time ## X.tv_nsec - start_time ## X.tv_nsec; \
     } while (0)
 
-#define PRINT_TIMER(X) \
-    printf("timer " #X ": %ld ms\n", (dsec ## X * 1000000000 + dnsec ## X)/1000000);
+#define PRINT_TIMER(X) FPRINT_TIMER(stdout, X)
+
+#define FPRINT_TIMER(STREAM, X) \
+    fprintf(STREAM, "timer " #X ": %ld ms\n", (dsec ## X * 1000000000 + dnsec ## X)/1000000);
 
 #endif /* TIMER_H */
