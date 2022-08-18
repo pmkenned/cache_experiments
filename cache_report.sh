@@ -5,12 +5,20 @@ for file in $@; do
     totals=`grep 'PROGRAM TOTALS' $file`
     FS=';' read -ra totals_arr <<< "$totals"
 
-    Dr=`  echo ${totals_arr[3]} | sed 's/,//g'`
-    D1mr=`echo ${totals_arr[4]} | sed 's/,//g'`
-    DLmr=`echo ${totals_arr[5]} | sed 's/,//g'`
-    Dw=`  echo ${totals_arr[6]} | sed 's/,//g'`
-    D1mw=`echo ${totals_arr[7]} | sed 's/,//g'`
-    DLmw=`echo ${totals_arr[8]} | sed 's/,//g'`
+    #echo "${totals_arr[*]}"
+
+    M=1
+    if [[ ${totals_arr[1]} =~ \(.*\) ]];
+    then
+        M=2
+    fi
+
+    Dr=`  echo ${totals_arr[3*$M]} | sed 's/,//g'`
+    D1mr=`echo ${totals_arr[4*$M]} | sed 's/,//g'`
+    DLmr=`echo ${totals_arr[5*$M]} | sed 's/,//g'`
+    Dw=`  echo ${totals_arr[6*$M]} | sed 's/,//g'`
+    D1mw=`echo ${totals_arr[7*$M]} | sed 's/,//g'`
+    DLmw=`echo ${totals_arr[8*$M]} | sed 's/,//g'`
 
     D1mwp=`expr $(expr 100 '*' $D1mw) '/' $Dw`
     D1mrp=`expr $(expr 100 '*' $D1mr) '/' $Dr`

@@ -38,5 +38,6 @@ else:
                 x += 1
 t1 = time.time()
 
+print(f"NROWS: {NROWS} NCOLS: {NCOLS} (matrix size: {0} MiB) ; dir: {major_dir}-major ; iterations: {niter}")
 total = t1 - t0
 print(f"{total:.2f}")
